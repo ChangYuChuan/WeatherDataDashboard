@@ -30,12 +30,18 @@ export class DisplayChartComponent implements OnChanges, OnInit {
           type: 'column',
           name: 'High_Humidity',
           yAxis: 1,
+          tooltip: {
+            valueSuffix: '%',
+          },
         },
         {
           data: [],
           type: 'column',
           name: 'Low_Humidity',
           yAxis: 1,
+          tooltip: {
+            valueSuffix: '%',
+          },
         },
         {
           data: [],
@@ -63,6 +69,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
         },
         {
           title: { text: 'Humidity' },
+          opposite: true,
         },
       ],
     };
