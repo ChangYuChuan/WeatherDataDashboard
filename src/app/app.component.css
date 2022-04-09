@@ -1,0 +1,20 @@
+body { 
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+div.control {
+    line-height: inherit;
+    margin: 0;
+    flex-wrap: wrap;
+}
+button{
+    width: auto;
+    padding: 8px;
+    border: none;
+    border-radius: 5px; 
+    background:  #325ca4;
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+}

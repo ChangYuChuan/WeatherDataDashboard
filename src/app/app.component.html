@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <div class="display">
+      <app-display-chart [dataSource]="weatherData"></app-display-chart>
+      <app-tabular-form [dataSource]="weatherData"></app-tabular-form>
+    </div>
+    <br/>
+    <div class="control">
+      <input type="date" name="begin" placeholder="yyyy-mm-dd" [(ngModel)]="startDateString" min="1997-01-01" [max]="today">
+      <button type="submit" (click)="onSubmit()">Submit</button>
+    </div>
+    <button (click)="breakLoopMethod()">breakLoopMethod</button>
+  </body>
+</html>
