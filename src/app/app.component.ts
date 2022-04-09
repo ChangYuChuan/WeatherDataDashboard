@@ -46,13 +46,21 @@ export class AppComponent {
       let fourDateData = await this.weatherSrv.GetFourDaystWeatherData(
         startDate
       );
+      // the data from the API is not comprehensive. cannot get forecast data of certain date.
       if (fourDateData.items.length == 0) {
-        // if we have data in result variable, use the last result.Date to send request.
+        // if we have data in result variable, use the previous result.Date to send request.
         if (resultLastIndx > 0) {
           resultLastIndx--;
           let lastResult = result[resultLastIndx];
           startDate = new Date(lastResult.Date);
         } else {
+          let dateString: any = this.datePipe.transform(
+            startDate,
+            'yyyy-MM-dd'
+          );
+          result.push({
+            Date: dateString,
+          });
           startDate.setDate(startDate.getDate() + 1);
         }
         continue;
