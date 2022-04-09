@@ -6,7 +6,6 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { reduce } from 'rxjs';
 import { ISingleHumidTempData } from '../Models/isingle-humidity-temperature-data';
 
 @Component({
