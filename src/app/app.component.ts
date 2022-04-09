@@ -46,7 +46,7 @@ export class AppComponent {
       let fourDateData = await this.weatherSrv.GetFourDaystWeatherData(
         startDate
       );
-      // the data from the API is not comprehensive. cannot get forecast data of certain date.
+      // the data from the API is not comprehensive. I found that API is unable to get forecast data of certain date.
       if (fourDateData.items.length == 0) {
         // if we have data in result variable, use the previous result.Date to send request.
         if (resultLastIndx > 0) {
