@@ -31,12 +31,7 @@ export class AppComponent {
     console.log('startDate', startDate);
     this.weatherData = await this.getMonthWeatherData(startDate);
   }
-  /**
-   * breakLoop
-   */
-  public breakLoopMethod() {
-    this.breakLoop = true;
-  }
+
   private async getMonthWeatherData(
     inputDate: Date
   ): Promise<ISingleHumidTempData[]> {
@@ -46,8 +41,8 @@ export class AppComponent {
     startDate.setDate(inputDate.getDate() - reqSize);
     let resultLastIndx = 0;
 
-    while (result.length < reqSize && this.breakLoop == false) {
-      console.log(`send request to retrieve the data of ${startDate}`);
+    while (result.length < reqSize) {
+      // Send request
       let fourDateData = await this.weatherSrv.GetFourDaystWeatherData(
         startDate
       );
@@ -76,7 +71,7 @@ export class AppComponent {
       // push the acquired data to the result.
       for (let data of humidTempData) {
         if (result.findIndex((row) => row.Date == data.Date) != -1) continue;
-        if (result.length >= reqSize || new Date(data.Date) >= inputDate) break;
+        if (result.length >= reqSize || new Date(data.Date) > inputDate) break;
         result.push(data);
       }
       // start date of the next round is based on the latest date of data we acquired.
