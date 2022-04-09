@@ -41,11 +41,11 @@ export class AppComponent {
     inputDate: Date
   ): Promise<ISingleHumidTempData[]> {
     const reqSize = 30;
-    let today = new Date();
     let result: ISingleHumidTempData[] = [];
     let startDate: Date = new Date(inputDate);
     startDate.setDate(inputDate.getDate() - reqSize);
     let resultLastIndx = 0;
+
     while (result.length < reqSize && this.breakLoop == false) {
       console.log(`send request to retrieve the data of ${startDate}`);
       let fourDateData = await this.weatherSrv.GetFourDaystWeatherData(
@@ -57,20 +57,12 @@ export class AppComponent {
           resultLastIndx--;
           let lastResult = result[resultLastIndx];
           startDate = new Date(lastResult.Date);
-          console.log(
-            'if fourDateData.Items is empty. change the startDate to',
-            startDate
-          );
         } else {
           startDate.setDate(startDate.getDate() + 1);
-          console.log(
-            'if fourDateData.Items is empty and resultLastIndx == 0. change the startDate to',
-            startDate
-          );
         }
         continue;
       }
-
+      // transform the data to the format which display-chart-component and tabular-form-component can consume
       let humidTempData: ISingleHumidTempData[] =
         fourDateData.items[0].forecasts.map((element) => {
           return {
@@ -81,11 +73,13 @@ export class AppComponent {
             Low_Temperature: element.temperature.low,
           };
         });
+      // push the acquired data to the result.
       for (let data of humidTempData) {
         if (result.findIndex((row) => row.Date == data.Date) != -1) continue;
-        if (result.length >= reqSize) break;
+        if (result.length >= reqSize || new Date(data.Date) >= inputDate) break;
         result.push(data);
       }
+      // start date of the next round is based on the latest date of data we acquired.
       resultLastIndx = result.length - 1;
       let lastResult = result[resultLastIndx];
       startDate = new Date(lastResult.Date);
