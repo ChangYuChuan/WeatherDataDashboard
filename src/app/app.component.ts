@@ -82,11 +82,8 @@ export class AppComponent {
           };
         });
       for (let data of humidTempData) {
-        if (
-          result.findIndex((row) => row.Date == data.Date) != -1 ||
-          result.length >= reqSize
-        )
-          continue;
+        if (result.findIndex((row) => row.Date == data.Date) != -1) continue;
+        if (result.length >= reqSize) break;
         result.push(data);
       }
       resultLastIndx = result.length - 1;
