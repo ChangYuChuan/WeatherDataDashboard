@@ -7,6 +7,7 @@ import {
 import { WeatherDataService } from './Services/weather-data.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { ColorString } from 'highcharts/highmaps.src';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,7 @@ export class AppComponent {
   async onSubmit() {
     if (this.startDateString == '') return;
     let startDate = new Date(this.startDateString);
-    console.log('startDate', startDate);
+
     this.weatherData = await this.getMonthWeatherData(startDate);
   }
 
@@ -40,31 +41,40 @@ export class AppComponent {
     let startDate: Date = new Date(inputDate);
     startDate.setDate(inputDate.getDate() - reqSize);
     let resultLastIndx = 0;
-
-    while (result.length < reqSize) {
+    let apiStatusLog = new Map<ColorString, boolean>();
+    let stopLoop = false;
+    while (!stopLoop) {
       // Send request
+      console.log(`send request of startDate ${startDate}`);
       let fourDateData = await this.weatherSrv.GetFourDaystWeatherData(
         startDate
       );
       // the data from the API is not comprehensive. I found that API is unable to get forecast data of certain date.
-      if (fourDateData.items.length == 0) {
+      if (fourDateData.items.length == 0) { 
+        console.log(`request with ${startDate} is empty`);
+        apiStatusLog.set(startDate.toDateString(), false);
         // if we have data in result variable, use the previous result.Date to send request.
         if (resultLastIndx > 0) {
+          console.log(`we have previous result`);
           resultLastIndx--;
           let lastResult = result[resultLastIndx];
-          startDate = new Date(lastResult.Date);
-        } else {
-          let dateString: any = this.datePipe.transform(
-            startDate,
-            'yyyy-MM-dd'
-          );
-          result.push({
-            Date: dateString,
-          });
-          startDate.setDate(startDate.getDate() + 1);
+          let lastResultDate = new Date(lastResult.Date);
+          //if the request with the date has been sent before, then we
+          if (!apiStatusLog.has(lastResultDate.toDateString())) {
+            console.log(
+              `use previous result ${lastResultDate} to send request`
+            );
+            startDate = lastResultDate;
+            continue;
+          }
         }
+        resultLastIndx = result.length - 1;
+        startDate.setDate(startDate.getDate() + 1);
+        console.log(`move startDate to ${startDate}`);
         continue;
       }
+
+      apiStatusLog.set(startDate.toDateString(), true);
       // transform the data to the format which display-chart-component and tabular-form-component can consume
       let humidTempData: ISingleHumidTempData[] =
         fourDateData.items[0].forecasts.map((element) => {
@@ -79,7 +89,12 @@ export class AppComponent {
       // push the acquired data to the result.
       for (let data of humidTempData) {
         if (result.findIndex((row) => row.Date == data.Date) != -1) continue;
-        if (result.length >= reqSize || new Date(data.Date) > inputDate) break;
+        // if the size conforms the requirement or the date of data exceed the inputdate, break the loop.
+        if (result.length >= reqSize || new Date(data.Date) > inputDate) {
+          stopLoop = true;
+          break;
+        }
+        console.log('collecting', data);
         result.push(data);
       }
       // start date of the next round is based on the latest date of data we acquired.
