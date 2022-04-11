@@ -50,7 +50,7 @@ export class AppComponent {
         startDate
       );
       // the data from the API is not comprehensive. I found that API is unable to get forecast data of certain date.
-      if (fourDateData.items.length == 0) { 
+      if (fourDateData.items.length == 0) {
         console.log(`request with ${startDate} is empty`);
         apiStatusLog.set(startDate.toDateString(), false);
         // if we have data in result variable, use the previous result.Date to send request.
@@ -59,7 +59,7 @@ export class AppComponent {
           resultLastIndx--;
           let lastResult = result[resultLastIndx];
           let lastResultDate = new Date(lastResult.Date);
-          //if the request with the date has been sent before, then we
+          //if the request with the date has not been sent before, we use the date as startDate.
           if (!apiStatusLog.has(lastResultDate.toDateString())) {
             console.log(
               `use previous result ${lastResultDate} to send request`
