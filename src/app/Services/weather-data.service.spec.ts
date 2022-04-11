@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { DatePipe } from  '@angular/common';
 import { WeatherDataService } from './weather-data.service';
-import { HttpClientModule } from '@angular/common/http/';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('WeatherDataService', () => {
   let service: WeatherDataService;

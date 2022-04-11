@@ -8,17 +8,17 @@ export interface ISingleDateForecastData {
     timestamp:string;
     forecast:string;
     relative_humidity: {
-        low:string;
-        high: string;
+        low:any;
+        high: any;
     };
     temperature: {
-        low:string;
-        high: string;
+        low:any;
+        high: any;
     };
     wind: {
         speed:{
-            low:string;
-            high: string;
+            low:any;
+            high: any;
         };
         direction:string;
     };

@@ -74,7 +74,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     };
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.dataSource.length == 0) return;
 
     let dataSourceMap = new Map<string, any[]>();
