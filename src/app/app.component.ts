@@ -16,8 +16,8 @@ import { ColorString } from 'highcharts/highmaps.src';
 })
 export class AppComponent {
   weatherData: ISingleHumidTempData[] = [];
-  startDateString: string = '';
   today: any = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+  startDateString: any = this.today;
   breakLoop: boolean = false;
   constructor(
     private weatherSrv: WeatherDataService,
