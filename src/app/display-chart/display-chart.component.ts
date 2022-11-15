@@ -17,6 +17,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
   @Input() dataSource: ISingleHumidTempData[] = [];
   Highcharts: typeof Highcharts = Highcharts; // required
   chartOptions: Highcharts.Options = {};
+  updateFlag = false;
   constructor() {}
 
   ngOnInit(): void {
@@ -104,6 +105,7 @@ export class DisplayChartComponent implements OnChanges, OnInit {
     }
 
     // assign the value to chartOptions.
+    this.updateFlag = true;
     this.chartOptions = {
       series: series,
       xAxis: {
